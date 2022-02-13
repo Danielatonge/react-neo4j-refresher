@@ -4,18 +4,101 @@ scalar PointInput
 
 type User {
   userId: ID!
+  type: String
+  fullName: String
+  userName: String
+  userImage: String
+  email: String
+  currentPosition: String
+  mentoring: [User]
+  goal: String
+  tags: [String]
+  mentors: [User]
+  dataSources: [DataSource] @relationship(type: "CONNECTS_DATA", direction: IN)
+  areaOfSpecialization: [Domain] @relationship(type: "IN_DOMAIN", direction: IN)
+  messages: [Message] @relationship(type: "MESSAGES", direction: IN)
+  posts: [Post] @relationship(type: "WRITES_POST", direction: IN)
+  location: Point
+  address: String
+  city: String
+  state: String
+  country: String
+  company: Company @relationship(type: "IN_COMPANY", direction: OUT)
+  createdAt: DateTime
+}
+
+type Message {
+  messageId: ID!
+  from: User @relationship(type: "MESSAGES", direction: OUT)
+  chatHistory: [MessageItem]
+}
+
+type MessageItem {
+  messageItemId: ID!
+  content: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type DataSource {
+  dataSourceId: ID!
   name: String
-  reviews: [Review] @relationship(type: "WROTE", direction: OUT)
-  avgStars: Float
-    @cypher(
-      statement: "MATCH (this)-[:WROTE]->(r:Review) RETURN toFloat(avg(r.stars))"
-    )
-  numReviews: Int
-    @cypher(statement: "MATCH (this)-[:WROTE]->(r:Review) RETURN COUNT(r)")
-  recommendations(first: Int = 3): [Business]
-    @cypher(
-      statement: "MATCH (this)-[:WROTE]->(r:Review)-[:REVIEWS]->(:Business)<-[:REVIEWS]-(:Review)<-[:WROTE]-(:User)-[:WROTE]->(:Review)-[:REVIEWS]->(rec:Business) WHERE NOT EXISTS( (this)-[:WROTE]->(:Review)-[:REVIEWS]->(rec) ) WITH rec, COUNT(*) AS num ORDER BY num DESC LIMIT $first RETURN rec"
-    )
+  link: String
+  user: User @relationship(type: "CONNECTS_DATA", direction: OUT)
+}
+
+type Domain {
+  domainId: ID!
+  name: String
+  similar: [String]
+  description: String
+  skillSets: [SkillSet] @relationship(type: "HAS_SKILLSET", direction: IN)
+  rating: Float
+  experience: Float
+  user: User @relationship(type: "IN_DOMAIN", direction: OUT)
+}
+
+type SkillSet {
+  skillSetId: ID!
+  name: String!
+  type: String
+  rating: Float
+  experience: Float
+  domain: Domain @relationship(type: "HAS_SKILLSET", direction: OUT)
+}
+
+type Post {
+  postId: ID!
+  content: String
+  extraContent: String
+  postMedia: [String]
+  links: String
+  likes: [User]
+  user: User @relationship(type: "WRITES_POST", direction: OUT)
+  comments: [Comment] @relationship(type: "HAS_COMMENT", direction: IN)
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Comment {
+  commentId: ID!
+  user: User 
+  content: String
+  likes: [User]
+  post: Post @relationship(type: "HAS_COMMENT", direction: OUT)
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Company {
+  companyId: ID!
+  name: String
+  city: String
+  state: String
+  country: String
+  address: String
+  location: Point
+  employees: [User] @relationship(type: "IN_COMPANY", direction: IN)
 }
 
 type Business {
