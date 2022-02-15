@@ -35,9 +35,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <MUILink color="inherit" href="https://grandstack.io/">
-        Your GRANDstack App Name Here
-      </MUILink>{' '}
+      <MUILink color="inherit">Unstoppable Demo</MUILink>{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -128,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'inherit',
   },
   appBarImage: {
-    maxHeight: '75px',
+    height: '35px',
     paddingRight: '20px',
   },
 }))
@@ -166,8 +164,8 @@ export default function App() {
             </IconButton>
             <img
               className={classes.appBarImage}
-              src="img/grandstack.png"
-              alt="GRANDstack logo"
+              src="img/logo-min.svg"
+              alt="unstoppable logo"
             />
             <Typography
               component="h1"
@@ -176,7 +174,7 @@ export default function App() {
               noWrap
               className={classes.title}
             >
-              Welcome To GRANDstack App
+              Unstoppable Demo
             </Typography>
           </Toolbar>
         </AppBar>

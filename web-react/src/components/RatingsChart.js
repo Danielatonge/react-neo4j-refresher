@@ -13,9 +13,9 @@ import Title from './Title'
 
 const GET_DATA_QUERY = gql`
   {
-    ratingsCount {
-      stars
-      count
+    employeeRating {
+      id
+      rating
     }
   }
 `
@@ -29,10 +29,10 @@ export default function RatingsChart() {
 
   return (
     <React.Fragment>
-      <Title>Ratings Distribution</Title>
+      <Title>Average Employee Rating</Title>
       <ResponsiveContainer>
         <BarChart
-          data={data.ratingsCount}
+          data={data.employeeRating}
           margin={{
             top: 16,
             right: 16,
@@ -40,17 +40,17 @@ export default function RatingsChart() {
             left: 24,
           }}
         >
-          <XAxis dataKey="stars" stroke={theme.palette.text.secondary} />
+          <XAxis dataKey="id" stroke={theme.palette.text.secondary} />
           <YAxis stroke={theme.palette.text.secondary}>
             <Label
               angle={270}
               position="left"
               style={{ textAnchor: 'middle', fill: theme.palette.text.primary }}
             >
-              Count
+              Rating
             </Label>
           </YAxis>
-          <Bar dataKey="count" fill={theme.palette.primary.main}></Bar>
+          <Bar dataKey="rating" fill={theme.palette.primary.main}></Bar>
         </BarChart>
       </ResponsiveContainer>
     </React.Fragment>
