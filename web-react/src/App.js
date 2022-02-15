@@ -21,6 +21,7 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  Button,
 } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import {
@@ -30,6 +31,8 @@ import {
   People as PeopleIcon,
 } from '@material-ui/icons'
 import Dashboard from './components/Dashboard'
+import { useAuth0 } from '@auth0/auth0-react'
+import Profile from './components/Profile'
 
 function Copyright() {
   return (
@@ -134,6 +137,9 @@ const useStyles = makeStyles((theme) => ({
 export default function App() {
   const classes = useStyles()
   const [open, setOpen] = React.useState(true)
+
+  const { loginWithRedirect, logout, isAuthenticated } = useAuth0()
+
   const handleDrawerOpen = () => {
     setOpen(true)
   }
@@ -176,6 +182,16 @@ export default function App() {
             >
               Unstoppable Demo
             </Typography>
+            {
+              !isAuthenticated && <Button color="inherit" onClick={() => loginWithRedirect()} >
+                Login
+              </Button>
+            }
+            {
+              isAuthenticated && <Button color="inherit" onClick={() => logout()} >
+                Logout
+              </Button>
+            }
           </Toolbar>
         </AppBar>
         <Drawer
@@ -214,6 +230,7 @@ export default function App() {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
+          <Profile />
           <Container maxWidth="lg" className={classes.container}>
             <Switch>
               <Route exact path="/" component={Dashboard} />
